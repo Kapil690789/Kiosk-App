@@ -28,13 +28,17 @@ const Payment = () => {
     try {
       const token = localStorage.getItem('token');
       // Initiate the transaction on the backend
-      const res = await axios.post('http://localhost:5001/api/kiosk/initiate', transaction, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/kiosk/initiate`,
+        transaction,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const orderData = res.data.transaction;
 
       const options = {
-        key: 'rzp_test_dw0zjtuVRUZ2r6', // Replace with your Razorpay key
+        key: import.meta.env.VITE_RAZORPAY_KEY,
         amount: orderData.amount * 100,
         currency: 'INR',
         name: 'Kiosk Service',
@@ -43,7 +47,7 @@ const Payment = () => {
         handler: async function (response) {
           try {
             await axios.post(
-              'http://localhost:5001/api/kiosk/confirm',
+              `${import.meta.env.VITE_API_URL}/api/kiosk/confirm`,
               {
                 transactionId: orderData._id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -53,7 +57,7 @@ const Payment = () => {
               { headers: { Authorization: `Bearer ${token}` } }
             );
             setPaymentStatus('Payment Successful! Kiosk unlocked.');
-            navigate('/'); // Redirect as needed (or show success)
+            navigate('/');
           } catch (err) {
             console.error('Confirmation error:', err);
             setPaymentStatus('Payment confirmation failed.');
