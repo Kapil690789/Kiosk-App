@@ -10,7 +10,10 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, { 
-  cors: { origin: process.env.FRONTEND_URL, methods: ['GET', 'POST'] } 
+  cors: { 
+    origin: [process.env.FRONTEND_URL, 'https://kiosk-app-tawny.vercel.app'], 
+    methods: ['GET', 'POST'] 
+  } 
 });
 
 // Middleware
