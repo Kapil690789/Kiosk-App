@@ -5,8 +5,8 @@ const router = express.Router();
 
 // Generate QR Code for Kiosk
 router.get('/api/qrcode', async (req, res) => {
-  const sessionId = uuidv4();
-  const qrData = `${process.env.FRONTEND_URL}/login?session=${sessionId}`;
+const sessionId = uuidv4();
+    const qrData = `${process.env.FRONTEND_URL}/login?session=${sessionId}`;
 
   try {
     const qrCode = await QRCode.toDataURL(qrData);
