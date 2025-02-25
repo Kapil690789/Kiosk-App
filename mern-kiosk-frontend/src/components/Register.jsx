@@ -1,0 +1,147 @@
+// src/components/Register.jsx
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaLock, FaSpinner } from 'react-icons/fa';
+
+const Register = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const sessionParam = searchParams.get('session');
+
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { name, email, password } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const res = await axios.post('http://localhost:5001/api/auth/register', { name, email, password });
+      localStorage.setItem('token', res.data.token);
+      if (sessionParam) {
+        navigate(`/mobile?session=${sessionParam}`, { replace: true });
+      } else {
+        navigate('/mobile', { replace: true });
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error registering');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute w-96 h-96 bg-purple-200 rounded-full -top-48 -right-48 opacity-40 animate-blob"></div>
+      <div className="absolute w-96 h-96 bg-indigo-200 rounded-full -bottom-48 -left-48 opacity-40 animate-blob animation-delay-2000"></div>
+
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg p-10 rounded-2xl shadow-2xl z-10">
+        <div className="flex justify-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+        </div>
+
+        <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Create Account
+        </h2>
+
+        {error && (
+          <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center">
+            <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <span className="text-red-600 text-sm">{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={onSubmit} className="space-y-6">
+          <div className="relative">
+            <FaUser className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={onChange}
+              placeholder="Name"
+              className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500"
+              required
+            />
+          </div>
+
+          <div className="relative">
+            <FaEnvelope className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={onChange}
+              placeholder="Email"
+              className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500"
+              required
+            />
+          </div>
+
+          <div className="relative">
+            <FaLock className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={onChange}
+              placeholder="Password"
+              className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-lg flex items-center justify-center disabled:opacity-50"
+          >
+            {isLoading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" />
+                Registering...
+              </>
+            ) : (
+              'Register'
+            )}
+          </button>
+        </form>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">
+            Already have an account?{' '}
+            <Link
+              to={sessionParam ? `/login?session=${sessionParam}` : "/login"}
+              className="font-semibold text-indigo-600"
+            >
+              Login
+            </Link>
+          </p>
+          <div className="border-t pt-4">
+            <p className="text-xs text-gray-500">
+              By continuing, you agree to our <a href="/terms" className="text-indigo-600">Terms of Service</a> and <a href="/privacy" className="text-indigo-600">Privacy Policy</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
