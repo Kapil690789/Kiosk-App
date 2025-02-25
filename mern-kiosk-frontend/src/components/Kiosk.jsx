@@ -11,7 +11,7 @@ const Kiosk = () => {
   useEffect(() => {
     const fetchQrCode = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/qrcode');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/qrcode`);
         const data = await response.json();
         setQrCode(data.qrCode);
         setSessionId(data.sessionId);
@@ -24,7 +24,7 @@ const Kiosk = () => {
 
   // Listen for unlock signals via Socket.IO
   useEffect(() => {
-    const socket = io('http://localhost:5001');
+   const socket = io(import.meta.env.VITE_API_URL);
     socket.on('unlock-kiosk', (data) => {
       setIsUnlocked(true);
       console.log('Kiosk unlocked for transaction:', data.transactionId);
