@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaShoppingCart, FaMoneyBillWave, FaSignOutAlt } from 'react-icons/fa';
 
+
 const ServiceSelection = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,12 +48,12 @@ const ServiceSelection = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden">
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg p-10 rounded-2xl shadow-2xl relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden animate__animated animate__fadeIn">
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg p-10 rounded-2xl shadow-2xl relative transform transition-all duration-500 hover:scale-105">
         {/* Logout Button inside the container */}
         <button
           onClick={handleLogout}
-          className="absolute top-4 right-4 flex items-center p-2 text-gray-600 hover:text-red-600"
+          className="absolute top-4 right-4 flex items-center p-2 text-gray-600 hover:text-red-600 transition-colors duration-300"
           title="Logout"
         >
           <FaSignOutAlt className="w-6 h-6" />
@@ -60,11 +61,11 @@ const ServiceSelection = () => {
         </button>
       
         <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+          <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg transition-shadow duration-300 hover:shadow-2xl">
             <FaShoppingCart className="w-10 h-10 text-white" />
           </div>
         </div>
-        <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-300">
           Select Service
         </h2>
         <form onSubmit={onSubmit} className="space-y-6">
@@ -74,7 +75,7 @@ const ServiceSelection = () => {
               <select
                 value={selectedItem}
                 onChange={(e) => setSelectedItem(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500"
+                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500 transition-colors duration-300 hover:shadow-md"
                 required
               >
                 <option value="">--Select--</option>
@@ -93,7 +94,7 @@ const ServiceSelection = () => {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500"
+                className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:border-indigo-500 transition-colors duration-300 hover:shadow-md"
                 placeholder="Enter amount"
                 required
               />
@@ -102,7 +103,7 @@ const ServiceSelection = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-lg flex items-center justify-center"
+            className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 rounded-lg flex items-center justify-center transition-transform duration-300 hover:scale-105 shadow-md hover:shadow-xl"
           >
             Proceed to Payment
           </button>
