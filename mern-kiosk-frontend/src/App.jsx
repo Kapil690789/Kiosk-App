@@ -11,13 +11,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Kiosk />} />
+        {/* Mobile Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/mobile" element={<ServiceSelection />} />
-        <Route path="/payment" element={<Payment />} />
+        
+        {/* Protected Mobile Flow */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/mobile" element={<ServiceSelection />} />
+          <Route path="/payment" element={<Payment />} />
+        </Route>
+        
+        {/* Kiosk Display (for the physical kiosk, no auth needed) */}
+        <Route path="/" element={<Kiosk />} />
       </Routes>
     </Router>
   );
 }
+
 export default App;
